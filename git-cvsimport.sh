@@ -53,6 +53,5 @@ if [ "$(git remote | grep -c origin)" = 0 ]; then
 	git push --mirror
 fi
 
-git push origin master
-git push --tags
+git push origin refs/heads/master refs/tags/*
 cd ..
