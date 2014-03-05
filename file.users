@@ -1,0 +1,11 @@
+# grep ^....-..-.. ChangeLog |sed -e 's,^....-..-..[ \t]*..:..[ \t]*,,'|sort -u>../../file.users 
+chl=Charles Longeau <chl@tuxfamily.org>
+christos=Christos Zoulas <christos@zoulas.com>
+gb=Giuliano Bertoletti <gb@symbolic.it>
+joerg=Joerg Sonnenberger <joerg@britannica.bec.de>
+jwalt=Joerg Walter <jwalt@mail.garni.ch>
+byrnes=Robert Byrnes <byrnes@wildpumpkin.net>
+kasal=Stepan Kasal <kasal@ucw.cz>
+ian=Ian Darwin <ian@darwinsys.com>
+rrt=Reuben Thomas <rrt@sc3d.org>
+ljt=Anon Ymous <ljt@astron.com>
