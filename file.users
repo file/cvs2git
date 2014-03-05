@@ -1,4 +1,4 @@
-# grep ^....-..-.. ChangeLog |sed -e 's,^....-..-..[ \t]*..:..[ \t]*,,'|sort -u>../../file.users 
+$ grep ^....-..-.. ChangeLog | sed -e 's,^....-..-..[ \t]*..:..[ \t]*,,'|sed -re 's, +, ,g'| sort -u
 chl=Charles Longeau <chl@tuxfamily.org>
 christos=Christos Zoulas <christos@zoulas.com>
 gb=Giuliano Bertoletti <gb@symbolic.it>
@@ -9,3 +9,4 @@ kasal=Stepan Kasal <kasal@ucw.cz>
 ian=Ian Darwin <ian@darwinsys.com>
 rrt=Reuben Thomas <rrt@sc3d.org>
 ljt=Anon Ymous <ljt@astron.com>
+kim=Kimmo Suominen <kimmo@suominen.com>
