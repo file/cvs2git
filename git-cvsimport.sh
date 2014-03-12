@@ -1,7 +1,8 @@
 #!/bin/sh
 # config
-url=ftp://ftp.astron.com/pri/file-nightly.tar.gz
-push_url=git@github.com:glensc/file.git
+#url=ftp://ftp.astron.com/pri/file-nightly.tar.gz
+rsync=file:file
+push_url=git@github.com:file/file.git
 
 # code
 set -e
@@ -14,24 +15,34 @@ if [ $(stat -c %u .) != $(id -u) ]; then
 	exit 1
 fi
 
-if [ "$1" = "update" ]; then
-	rm -f file-nightly.tar.gz
+# load ssh key
+if [ -f /usr/share/okas/ssh-auth-sock ]; then
+	. /usr/share/okas/ssh-auth-sock
+	ssh-auth-sock
 fi
 
-if [ ! -f file-nightly.tar.gz ]; then
-	wget -q $url -O .tmp.$$.tgz
-	if [ -d cvs/file ]; then
-		mv cvs/file .tmp.$$.file
-		rm -rf .tmp.$$.file &
+if [ -n "$rsync" ]; then
+	rsync -axSH -e ssh "$rsync/" cvs/file/
+else
+	if [ "$1" = "update" ]; then
+		rm -f file-nightly.tar.gz
 	fi
-   	mv -f .tmp.$$.tgz file-nightly.tar.gz
-fi
 
-if [ ! -d cvs/file ]; then
-	install -d cvs/CVSROOT
-	cd cvs
-	tar -xzf ../file-nightly.tar.gz
-	cd ..
+	if [ ! -f file-nightly.tar.gz ]; then
+		wget -q $url -O .tmp.$$.tgz
+		if [ -d cvs/file ]; then
+			mv cvs/file .tmp.$$.file
+			rm -rf .tmp.$$.file &
+		fi
+		mv -f .tmp.$$.tgz file-nightly.tar.gz
+	fi
+
+	if [ ! -d cvs/file ]; then
+		install -d cvs/CVSROOT
+		cd cvs
+		tar -xzf ../file-nightly.tar.gz
+		cd ..
+	fi
 fi
 
 out=$(git -c i18n.commitencoding=iso8859-1 cvsimport -d $(pwd)/cvs -R -A file.users -C git file)
@@ -39,12 +50,6 @@ echo "$out"
 
 if [ "$out" = "Already up-to-date." ]; then
 	exit 0
-fi
-
-# load ssh key
-if [ -f /usr/share/okas/ssh-auth-sock ]; then
-	. /usr/share/okas/ssh-auth-sock
-	ssh-auth-sock
 fi
 
 cd git
