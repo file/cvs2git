@@ -45,15 +45,19 @@ else
 	fi
 fi
 
-out=$(git -c i18n.commitencoding=iso8859-1 cvsimport -d $(pwd)/cvs -R -A file.users -C git file)
-echo "$out"
+out=$(git -c i18n.commitencoding=iso8859-1 cvsimport -d $(pwd)/cvs -R -A file.users -C git file 2>&1)
+
+# filter out common noise. must be separate subshell to catch errors from git command
+out=$(echo "$out" | sed -e '/Skipping #CVSPS_NO_BRANCH/d')
 
 if [ "$out" = "Already up-to-date." ]; then
 	exit 0
 fi
 
+echo "$out"
+
 cd git
-if [ "$(git remote | grep -c origin)" = 0 ]; then
+if ! git config remote.origin.url >/dev/null; then
 	git remote add origin $push_url
 	git push --mirror
 fi
