@@ -1,7 +1,19 @@
 #!/bin/sh
 # config
+
+# source for import:
+# "url": a tarball snapshot
 #url=ftp://ftp.astron.com/pri/file-nightly.tar.gz
+
+# "rsync" use rsync
+# for rsync, you need to setup ~/.ssh/config:
+#Host file
+#	Hostname address.from.where.to.sync
+#	ForwardAgent no
+#	User		glen
 rsync=file:file
+
+# git url where to push
 push_url=git@github.com:file/file.git
 
 # code
@@ -9,7 +21,7 @@ set -e
 dir=$(dirname "$0")
 cd "$dir"
 
-# precaution not to load run it accidentally as root
+# precaution not to run it accidentally as root
 if [ $(stat -c %u .) != $(id -u) ]; then
 	echo >&2 "You (`id -un`) not owner (`stat -c %U .`) of this dir (`pwd`), aborting"
 	exit 1
